@@ -3,6 +3,7 @@ var philippineScripts = (function () {
 
   var tagalog = {
     start: 0x1700,
+    virama: true,
     consonantMappingOffsets: {
       b: 0x0a,
       k: 0x03,
@@ -24,6 +25,7 @@ var philippineScripts = (function () {
 
   var hanunoo = {
     start: 0x1720,
+    virama: true,
     consonantMappingOffsets: {
       b: 0x0a,
       k: 0x03,
@@ -45,6 +47,7 @@ var philippineScripts = (function () {
 
   var buhid = {
     start: 0x1740,
+    virama: false,
     consonantMappingOffsets: {
       b: 0x0a,
       k: 0x03,
@@ -66,6 +69,7 @@ var philippineScripts = (function () {
 
   var tagbanwa = {
     start: 0x1760,
+    virama: false,
     consonantMappingOffsets: {
       b: 0x0a,
       k: 0x03,
@@ -108,23 +112,29 @@ var philippineScripts = (function () {
   	u: 0x13,
   };
 
-  const replaceConsonantVowelPair = scriptDef => (consonant, vowel) => {
-  	const { start, consonantMappingOffsets, } = scriptDef;
-  	const { [vowel]: theVowelOffset = 0x14 } = VOWEL_OFFSETS;
-
-  	if (consonantMappingOffsets[consonant] === null) {
-  		return String.fromCodePoint(start + INITIAL_VOWEL_OFFSETS[vowel])
-  	}
-
-  	const theConsonant = String.fromCodePoint(start + consonantMappingOffsets[consonant]);
-  	const theVowel = theVowelOffset === null ? '' : String.fromCodePoint(start + theVowelOffset);
-  	return `${theConsonant}${theVowel}`
-  };
-
   const replaceInitialVowelPair = scriptDef => vowel => {
   	const { start, } = scriptDef;
   	return String
   		.fromCodePoint(start + INITIAL_VOWEL_OFFSETS[vowel])
+  };
+
+  const replaceConsonantVowelPair = scriptDef => (consonant, vowel = '') => {
+  	const { start, consonantMappingOffsets, virama, } = scriptDef;
+  	let { [vowel]: theVowelOffset = 0x14 } = VOWEL_OFFSETS;
+
+  	if (!virama && vowel === '') {
+  		return ''
+  	}
+
+
+  	if (consonantMappingOffsets[consonant] === null) {
+  		return typeof INITIAL_VOWEL_OFFSETS[vowel] === 'number' ? String.fromCodePoint(start + INITIAL_VOWEL_OFFSETS[vowel]) : ''
+  	}
+
+  	const theConsonant = String.fromCodePoint(start + consonantMappingOffsets[consonant]);
+  	const theVowel = theVowelOffset === null ? '' : String.fromCodePoint(start + theVowelOffset);
+
+  	return `${theConsonant}${theVowel}`
   };
 
   const convertPunctuation = s => (
@@ -132,9 +142,9 @@ var philippineScripts = (function () {
   		// special characters
   		.replace(/[\]_^[}{@#$%&*()<>+=|"'\/-]/g, '')
   		// sentence ending characters
-  		.replace(/[.!?]+\s*/g, '᜶')
+  		.replace(/[.!?]+[ ]*/g, '᜶')
   		// sentence subdivision characters (breath marks)
-  		.replace(/[,:;]+\s*/g, '᜵')
+  		.replace(/[,:;]+[ ]*/g, '᜵')
   		// remove double spacing
   		.replace(/[ ][ ]+/g, ' ')
   );
