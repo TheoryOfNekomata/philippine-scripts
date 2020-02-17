@@ -1,0 +1,23 @@
+{
+  "name": "@theoryofnekomata/philippine-scripts",
+  "version": "1.0.0",
+  "description": "Basic conversion of Philippine languages from Latin script to ancient scripts (e.g. Baybayin).",
+  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "repository": "https://github.com/Temoto-kun/philippine-languages.git",
+  "author": "TheoryOfNekomata <allan.crisostomo@outlook.com>",
+  "license": "MIT",
+  "private": false,
+  "homepage": "https://Temoto-kun.github.io/philippine-scripts",
+  "scripts": {
+    "build": "rollup -c",
+    "deploy": "gh-pages -d docs"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "rollup": "^1.31.1"
+  },
+  "dependencies": {
+    "gh-pages": "^2.2.0"
+  }
+}
