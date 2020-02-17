@@ -6,17 +6,42 @@
     <link rel="stylesheet" href="./css/style.css" />
   </head>
   <body>
-    <div contenteditable></div>
-    <div></div>
+    <div contenteditable id="input" class="fragment">
+
+    </div>
+    <div class="fragment" id="output">
+      <div id="scriptName">Tagalog</div>
+      <div id="outputText"></div>
+      <select id="scriptSelector">
+        <option value="tagalog">Tagalog</option>
+        <option value="buhid">Buhid</option>
+        <option value="tagbanwa">Tagbanwa</option>
+        <option value="hanunoo">Hanunoo</option>
+      </select>
+    </div>
     <script src="./js/bundle.js"></script>
     <script>
       ((window) => {
         const { philippineScripts, } = window
-        const input = window.document.body.children[0]
-        const output = window.document.body.children[1]
+        const input = window.document.getElementById('input')
+        const output = window.document.getElementById('outputText')
+        const scriptName = window.document.getElementById('scriptName')
+        const select = window.document.getElementById('scriptSelector')
+        let script = select.value
+
+        const render = () => {
+          output.innerText = philippineScripts(input.innerText, { script, })
+        }
 
         input.addEventListener('input', () => {
-          output.innerText = philippineScripts(input.innerText)
+          render()
+        })
+
+        select.addEventListener('change', e => {
+          script = e.target.value
+          scriptName.innerText = script
+
+          render()
         })
       })(window)
     </script>
