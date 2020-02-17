@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en-PH">
+  <head>
+    <meta charset="UTF-8">
+    <title>Philippine Scripts</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div contenteditable></div>
+    <div></div>
+    <script src="/js/bundle.js"></script>
+    <script>
+      ((window) => {
+        const { philippineScripts, } = window
+        const input = window.document.body.children[0]
+        const output = window.document.body.children[1]
+
+        input.addEventListener('input', () => {
+          output.innerText = philippineScripts(input.innerText)
+        })
+      })(window)
+    </script>
+  </body>
+</html>
